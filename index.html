@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para ti</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --noche:#0a1633;
+  --azul:#1d4ed8;
+  --azul-claro:#7fb0ff;
+  --rojo:#e11d48;
+  --rosa:#ffe4ea;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  font-family:'Quicksand',system-ui,sans-serif;
+  color:var(--rosa);
+  background:
+    radial-gradient(circle at 20% 10%,rgba(225,29,72,.28),transparent 45%),
+    radial-gradient(circle at 85% 30%,rgba(29,78,216,.45),transparent 50%),
+    var(--noche);
+  background-attachment:fixed;
+  overflow-x:hidden;
+}
+h1,h2{font-family:'Pacifico',cursive;font-weight:400;line-height:1.2;color:#fff}
+
+/* ---------- Pantallas ---------- */
+.pantalla{display:none;min-height:100vh;position:relative;z-index:1;flex-direction:column;align-items:center}
+.pantalla.activa{display:flex;animation:aparece .9s ease both}
+@keyframes aparece{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+
+.boton{
+  border:0;cursor:pointer;font:600 1.1rem 'Quicksand',sans-serif;
+  color:#fff;background:linear-gradient(135deg,var(--rojo),#ff5c7a);
+  padding:14px 36px;border-radius:999px;
+  box-shadow:0 8px 24px rgba(225,29,72,.45);
+  transition:transform .2s;
+}
+.boton:hover{transform:scale(1.06)}
+.boton:focus-visible,.musica-btn:focus-visible{outline:3px solid var(--azul-claro);outline-offset:3px}
+
+.musica-btn{
+  position:fixed;top:14px;right:14px;z-index:10;
+  width:48px;height:48px;border-radius:50%;border:0;cursor:pointer;
+  background:var(--azul);color:#fff;font-size:1.3rem;
+  box-shadow:0 4px 14px rgba(0,0,0,.4);
+}
+
+/* ---------- Estrellas ---------- */
+.estrellas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.estrella{position:absolute;border-radius:50%;background:#fff;animation:titila var(--d,3s) ease-in-out infinite;animation-delay:var(--r,0s)}
+@keyframes titila{0%,100%{opacity:.2;transform:scale(.8)}50%{opacity:1;transform:scale(1.3)}}
+
+/* ---------- 2. Carretera: ciudad de noche ---------- */
+#p2{justify-content:center;text-align:center;padding:24px 24px 250px;overflow:hidden}
+#p2 h1{font-size:clamp(2rem,8.5vw,4rem);text-shadow:0 0 34px rgba(225,29,72,.85),0 2px 10px rgba(0,0,0,.6);margin-bottom:28px}
+#p2 h1,#p2 .boton{position:relative;z-index:6}
+
+.escena{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.cielo{position:absolute;inset:0;background:linear-gradient(#040915 0%,#0b1a55 42%,#3b2374 70%,#c2264f 100%)}
+.luna{position:absolute;top:9%;right:11%;width:74px;height:74px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#fff,#e2eaff 55%,#a9b8ea);
+  box-shadow:0 0 50px 14px rgba(170,190,255,.35)}
+.nube{position:absolute;left:0;width:260px;height:46px;border-radius:50%;background:rgba(170,160,235,.16);
+  filter:blur(14px);animation:nube 80s linear infinite}
+@keyframes nube{from{transform:translateX(-340px)}to{transform:translateX(calc(100vw + 340px))}}
+.fugaz{position:absolute;top:12%;left:70%;width:110px;height:2px;background:linear-gradient(90deg,#fff,transparent);
+  opacity:0;animation:fugaz 11s ease-in infinite 3s}
+@keyframes fugaz{
+  0%{opacity:0;transform:translate(0,0) rotate(-25deg)}
+  2%{opacity:1}
+  8%{opacity:0;transform:translate(-340px,150px) rotate(-25deg)}
+  100%{opacity:0}
+}
+
+.ciudad{position:absolute;left:0;bottom:190px;height:230px;width:100%}
+.ciudad .tira{position:absolute;bottom:0;left:0;display:flex;align-items:flex-end;width:max-content;animation:pasar var(--v) linear infinite}
+.ciudad.lejos{--v:150s;opacity:.85}
+.ciudad.cerca{--v:75s}
+.edif{flex:none;margin-right:2px}
+@keyframes pasar{to{transform:translateX(-50%)}}
+
+.farolas{position:absolute;left:0;bottom:190px;height:130px;width:100%}
+.farolas .tira{position:absolute;bottom:0;left:0;width:max-content;display:flex;animation:pasar 26s linear infinite}
+.farola{flex:none;width:4px;height:120px;margin-right:300px;background:#080e26;position:relative}
+.farola::before{content:"";position:absolute;top:-4px;left:-14px;width:30px;height:6px;border-radius:3px;background:#080e26}
+.farola::after{content:"";position:absolute;top:-30px;left:-40px;width:84px;height:84px;
+  background:radial-gradient(circle,rgba(255,232,160,.8),rgba(255,200,90,.16) 45%,transparent 70%)}
+
+.carretera{position:absolute;left:0;right:0;bottom:0;height:190px;
+  background:linear-gradient(#141d3d 0,#0a1128 28%,#050916 100%);
+  border-top:5px solid #2a3a7a;box-shadow:0 -6px 18px rgba(0,0,0,.45)}
+.carretera::before{content:"";position:absolute;left:0;right:0;top:0;height:12px;
+  background:repeating-linear-gradient(90deg,#c9d3ff 0 26px,#2a3a7a 26px 52px);opacity:.3;animation:linea2 1.3s linear infinite}
+.carretera::after{content:"";position:absolute;left:0;right:0;top:104px;height:5px;
+  background:repeating-linear-gradient(90deg,#ffe4ea 0 40px,transparent 40px 84px);opacity:.6;animation:linea 1s linear infinite}
+@keyframes linea{to{background-position:-84px 0}}
+@keyframes linea2{to{background-position:-52px 0}}
+
+.carro{position:absolute;left:0;width:170px;height:68px;z-index:4}
+.carro.rojo{bottom:112px;--c:#e11d48;animation:derecha 10s linear infinite}
+.carro.azul{bottom:20px;--c:#1d4ed8;animation:izquierda 13s linear infinite;animation-delay:-5s}
+@keyframes derecha{from{transform:translateX(-220px)}to{transform:translateX(calc(100vw + 60px))}}
+@keyframes izquierda{from{transform:translateX(calc(100vw + 60px))}to{transform:translateX(-220px)}}
+.giro{position:relative;width:100%;height:100%}
+.azul .giro{transform:scaleX(-1)}
+.giro::after{content:"";position:absolute;left:8px;right:8px;bottom:-5px;height:10px;
+  background:radial-gradient(ellipse,rgba(0,0,0,.65),transparent 70%)}
+.giro svg{position:relative;z-index:1;width:100%;height:100%;display:block;overflow:visible;
+  filter:drop-shadow(0 0 7px rgba(255,70,90,.55));animation:rebote .5s ease-in-out infinite alternate}
+.azul .giro svg{filter:drop-shadow(0 0 7px rgba(80,140,255,.6))}
+@keyframes rebote{to{transform:translateY(-1.5px)}}
+.rueda{transform-box:fill-box;transform-origin:center;animation:gira .45s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.haz{position:absolute;left:100%;top:22px;margin-left:-10px;width:170px;height:40px;
+  background:linear-gradient(90deg,rgba(255,244,180,.55),transparent);
+  clip-path:polygon(0 38%,100% 0,100% 100%,0 62%)}
+
+.humo{
+  position:fixed;z-index:3;pointer-events:none;line-height:1;
+  animation:sube 2.8s ease-out forwards;
+}
+@keyframes sube{
+  0%{opacity:.95;transform:translate(0,0) scale(.4)}
+  100%{opacity:0;transform:translate(var(--dx),-140px) scale(1.6)}
+}
+
+/* ---------- Pantallas de contenido ---------- */
+#p3,#p4,#p5{padding:70px 20px 60px;max-width:720px;margin:0 auto}
+#p3 h2,#p4 h2,#p5 h2{font-size:clamp(2rem,7vw,3rem);text-align:center;margin-bottom:26px}
+
+/* ---------- 3. Fotos ---------- */
+.fotos{display:flex;flex-wrap:wrap;gap:22px;justify-content:center;margin:10px 0 40px}
+.foto{
+  width:min(200px,42vw);background:#fff;padding:9px 9px 30px;border-radius:6px;
+  box-shadow:0 10px 26px rgba(0,0,0,.5);
+}
+.foto img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block;border-radius:3px}
+.foto:nth-child(3n+1){transform:rotate(-4deg)}
+.foto:nth-child(3n+2){transform:rotate(3deg) translateY(10px)}
+.foto:nth-child(3n){transform:rotate(-2deg)}
+
+/* ---------- 4. Calendario ---------- */
+.calendario{
+  width:100%;max-width:420px;margin:0 auto 26px;padding:22px 18px;border-radius:22px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(127,176,255,.35);backdrop-filter:blur(6px);
+}
+.cal-mes{font-family:'Pacifico',cursive;font-size:1.6rem;text-align:center;color:#fff;margin-bottom:14px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.cal-dia{padding:9px 0;border-radius:12px;font-weight:600;font-size:.98rem;position:relative}
+.cal-sem{color:var(--azul-claro);font-size:.85rem;padding:4px 0}
+.cal-dia.especial{
+  color:#fff;background:linear-gradient(135deg,var(--rojo),#ff5c7a);
+  box-shadow:0 0 20px rgba(225,29,72,.8);animation:latido 1.4s ease-in-out infinite;z-index:1
+}
+@keyframes latido{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.cal-nota{text-align:center;font-family:'Pacifico',cursive;font-size:1.35rem;color:#ff8fa5;margin-bottom:30px}
+
+/* ---------- 1. Portada: galaxia de corazón ---------- */
+#p1{
+  width:100%;height:100vh;overflow:hidden;justify-content:flex-end;align-items:center;padding:0 20px 34px;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(225,29,72,.3),transparent 60%),
+    radial-gradient(circle at 20% 85%,rgba(29,78,216,.4),transparent 55%);
+}
+#galaxia{position:absolute;inset:0;width:100%;height:100%;touch-action:none;cursor:grab}
+.galaxia-titulo{position:absolute;top:8%;left:0;right:0;text-align:center;font-size:clamp(2.4rem,9vw,4rem);
+  text-shadow:0 0 26px rgba(255,80,120,.9);pointer-events:none}
+.galaxia-frase{position:relative;z-index:2;text-align:center;font-size:1.15rem;color:#ffd0dc;margin-bottom:22px;
+  min-height:2.6em;text-shadow:0 0 12px rgba(255,80,120,.8);transition:opacity .6s;pointer-events:none}
+#p1 .boton{position:relative;z-index:2}
+
+/* ---------- 5. Canciones ---------- */
+.cancion{
+  width:100%;margin-bottom:16px;padding:16px 18px;border-radius:18px;
+  background:rgba(255,255,255,.07);border:1px solid rgba(127,176,255,.35);
+}
+.cancion:nth-child(even){border-color:rgba(225,29,72,.5)}
+.cancion p{font-weight:600;margin-bottom:10px}
+.cancion audio{width:100%;height:40px}
+.final{margin-top:26px;text-align:center;font-family:'Pacifico',cursive;font-size:1.6rem;color:#ff8fa5}
+
+#p3 .boton,#p4 .boton,#p5 .boton{margin:0 auto;display:block}
+
+/* ---------- Emojis que flotan ---------- */
+.flota{position:fixed;bottom:-50px;z-index:2;pointer-events:none;opacity:.85;animation:flota linear forwards}
+@keyframes flota{to{transform:translateY(-115vh) rotate(var(--g,20deg));opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  .carro{animation-duration:40s}
+  .pantalla.activa{animation:none}
+}
+</style>
+</head>
+
+<body>
+
+<div class="estrellas" id="estrellasFondo"></div>
+
+<!-- Música de fondo -->
+<audio id="fondo" src="musica/congratulations.mp3" loop></audio>
+
+<button class="musica-btn" onclick="activarMusica()" aria-label="Activar o pausar música">♪</button>
+
+<!-- 1. Portada: galaxia de corazón -->
+<section class="pantalla activa" id="p1">
+  <canvas id="galaxia"></canvas>
+  <h1 class="galaxia-titulo">Con todo mi amor 🩶</h1>
+  <p class="galaxia-frase" id="frase"></p>
+  <button class="boton" onclick="irA(2)">Siguiente</button>
+</section>
+
+<!-- 2. Carretera -->
+<section class="pantalla" id="p2">
+  <div class="escena" aria-hidden="true">
+    <div class="cielo" id="cielo"></div>
+    <div class="luna"></div>
+    <div class="nube" style="top:18%"></div>
+    <div class="nube" style="top:32%;width:340px;animation-duration:110s;animation-delay:-50s"></div>
+    <div class="fugaz"></div>
+    <div class="ciudad lejos" id="ciudadLejos"></div>
+    <div class="ciudad cerca" id="ciudadCerca"></div>
+    <div class="farolas" id="farolas"></div>
+    <div class="carretera"></div>
+    <div class="carro rojo" id="carroRojo"><div class="giro"></div></div>
+    <div class="carro azul" id="carroAzul"><div class="giro"></div></div>
+  </div>
+  <h1>Contigo quiero recorrer todos los caminos 🩶</h1>
+  <button class="boton" onclick="irA(3)">Siguiente</button>
+</section>
+
+<template id="tplCarro">
+  <div class="haz"></div>
+  <svg viewBox="0 0 170 68">
+    <defs>
+      <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".4"/>
+        <stop offset=".55" stop-color="#fff" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <path d="M6 46 L6 36 Q8 30 20 28 L38 26 Q50 8 72 8 L104 8 Q120 8 130 24 L152 30 Q164 32 164 42 L164 50 L6 50 Z" fill="var(--c)"/>
+    <path d="M6 46 L6 36 Q8 30 20 28 L38 26 Q50 8 72 8 L104 8 Q120 8 130 24 L152 30 Q164 32 164 42 L164 50 L6 50 Z" fill="url(#brillo)"/>
+    <path d="M46 26 Q54 13 72 13 L82 13 L82 26 Z M88 13 L104 13 Q116 13 124 26 L88 26 Z" fill="#bfd8ff" opacity=".88"/>
+    <path d="M8 40 L162 40" stroke="#fff" stroke-opacity=".3" stroke-width="1.5"/>
+    <rect x="6" y="33" width="6" height="7" rx="2" fill="#ff3b4e"/>
+    <ellipse cx="158" cy="37" rx="6" ry="4" fill="#fff6bf"/>
+    <circle cx="42" cy="51" r="14" fill="#050915"/>
+    <circle cx="128" cy="51" r="14" fill="#050915"/>
+    <g class="rueda"><circle cx="42" cy="51" r="11" fill="#0d1226"/><circle cx="42" cy="51" r="6.5" fill="#b8c6ee"/><path d="M42 44.5V57.5M35.5 51H48.5" stroke="#3a466f" stroke-width="2"/></g>
+    <g class="rueda"><circle cx="128" cy="51" r="11" fill="#0d1226"/><circle cx="128" cy="51" r="6.5" fill="#b8c6ee"/><path d="M128 44.5V57.5M121.5 51H134.5" stroke="#3a466f" stroke-width="2"/></g>
+  </svg>
+</template>
+
+<!-- 3. Momentos juntos -->
+<section class="pantalla" id="p3">
+  <h2>Momentos juntos 🩶</h2>
+  <div class="fotos">
+    <div class="foto"><img src="foto1.jpg" alt="Foto 1"></div>
+    <div class="foto"><img src="foto2.jpg" alt="Foto 2"></div>
+    <div class="foto"><img src="foto3.jpg" alt="Foto 3"></div>
+    <div class="foto"><img src="foto4.jpg" alt="Foto 4"></div>
+    <div class="foto"><img src="foto5.jpg" alt="Foto 5"></div>
+    <div class="foto"><img src="foto6.jpg" alt="Foto 6"></div>
+    <div class="foto"><img src="foto7.jpg" alt="Foto 7"></div>
+  </div>
+  <button class="boton" onclick="irA(4)">Siguiente</button>
+</section>
+
+<!-- 4. Calendario -->
+<section class="pantalla" id="p4">
+  <h2>Nuestro calendario 🩶</h2>
+  <div class="calendario">
+    <div class="cal-mes">Septiembre 2026</div>
+    <div class="cal-grid" id="calGrid"></div>
+  </div>
+  <p class="cal-nota">19 de septiembre 👩🏽‍❤️‍💋‍👨🏻 Nuestro día</p>
+  <button class="boton" onclick="irA(5)">Siguiente</button>
+</section>
+
+<!-- 5. Canciones -->
+<section class="pantalla" id="p5">
+  <h2>Canciones para ti 🩶</h2>
+  <div class="cancion">
+    <p>El mejor momento</p>
+    <audio controls preload="none" src="musica/el_mejor_momento.mp3"></audio>
+  </div>
+  <div class="cancion">
+    <p>Es pura magia</p>
+    <audio controls preload="none" src="musica/es_pura_magica.mp3"></audio>
+  </div>
+  <div class="cancion">
+    <p>Mía</p>
+    <audio controls preload="none" src="musica/mia.mp3"></audio>
+  </div>
+  <p class="final">Te amo 🩶 👩🏽‍❤️‍💋‍👨🏻</p>
+  <button class="boton" style="margin-top:26px" onclick="irA(1)">Volver al inicio</button>
+</section>
+
+<script>
+const fondo = document.getElementById("fondo");
+
+function activarMusica(){
+  if(fondo.paused){
+    fondo.play().catch(() => {});
+  }else{
+    fondo.pause();
+  }
+}
+
+function irA(n){
+  document.querySelectorAll(".pantalla").forEach(p => p.classList.remove("activa"));
+  document.getElementById("p" + n).classList.add("activa");
+  fondo.play().catch(() => {});
+  window.scrollTo({ top:0, behavior:"smooth" });
+}
+
+/* Al dar play a una canción, se pausa la música de fondo y las otras canciones.
+   Cuando termina, vuelve la música de fondo. */
+const canciones = document.querySelectorAll(".cancion audio");
+canciones.forEach(a => {
+  a.addEventListener("play", () => {
+    fondo.pause();
+    canciones.forEach(o => { if(o !== a) o.pause(); });
+  });
+  a.addEventListener("ended", () => fondo.play().catch(() => {}));
+});
+
+/* ---------- Escena de la carretera ---------- */
+function estrellas(cont, n, maxTop){
+  for(let i = 0; i < n; i++){
+    const e = document.createElement("i");
+    const t = 1 + Math.random() * 2;
+    e.className = "estrella";
+    e.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*maxTop}%;width:${t}px;height:${t}px;--d:${2+Math.random()*3}s;--r:${-Math.random()*5}s`;
+    cont.appendChild(e);
+  }
+}
+
+function ciudad(el, color, punto, hMin, hMax){
+  const tira = document.createElement("div");
+  tira.className = "tira";
+  const specs = [];
+  let w = 0;
+  const meta = Math.max(innerWidth, 700) + 100;
+  while(w < meta){
+    const ancho = (36 + Math.random() * 50) | 0;
+    specs.push({ ancho, alto:(hMin + Math.random() * (hMax - hMin)) | 0, off:(Math.random() * 10) | 0 });
+    w += ancho + 2;
+  }
+  for(let c = 0; c < 2; c++){
+    specs.forEach(s => {
+      const d = document.createElement("div");
+      d.className = "edif";
+      d.style.cssText = `width:${s.ancho}px;height:${s.alto}px;background-color:${color};background-image:radial-gradient(circle,${punto} 1.3px,transparent 1.9px);background-size:11px 15px;background-position:${s.off}px 6px`;
+      tira.appendChild(d);
+    });
+  }
+  el.appendChild(tira);
+}
+
+function farolas(el){
+  const tira = document.createElement("div");
+  tira.className = "tira";
+  const n = Math.ceil(innerWidth / 304) + 1;
+  for(let i = 0; i < n * 2; i++){
+    const f = document.createElement("div");
+    f.className = "farola";
+    tira.appendChild(f);
+  }
+  el.appendChild(tira);
+}
+
+estrellas(document.getElementById("estrellasFondo"), 90, 100);
+estrellas(document.getElementById("cielo"), 70, 60);
+ciudad(document.getElementById("ciudadLejos"), "#16245a", "rgba(140,180,255,.65)", 70, 170);
+ciudad(document.getElementById("ciudadCerca"), "#0a1236", "rgba(255,214,120,.9)", 60, 150);
+farolas(document.getElementById("farolas"));
+
+const tpl = document.getElementById("tplCarro");
+document.querySelectorAll(".giro").forEach(g => g.appendChild(tpl.content.cloneNode(true)));
+
+/* ---------- Calendario de septiembre 2026 ---------- */
+(function(){
+  const grid = document.getElementById("calGrid");
+  ["L","M","M","J","V","S","D"].forEach(d => {
+    const s = document.createElement("div");
+    s.className = "cal-sem";
+    s.textContent = d;
+    grid.appendChild(s);
+  });
+  const vacios = (new Date(2026, 8, 1).getDay() + 6) % 7;
+  const dias = new Date(2026, 9, 0).getDate();
+  for(let i = 0; i < vacios; i++) grid.appendChild(document.createElement("div"));
+  for(let d = 1; d <= dias; d++){
+    const c = document.createElement("div");
+    c.className = "cal-dia" + (d === 19 ? " especial" : "");
+    c.textContent = d === 19 ? "♥ 19" : d;
+    grid.appendChild(c);
+  }
+})();
+
+/* ---------- Galaxia de corazón ---------- */
+const frases = [
+  "Siempre juntos, tú y yo",
+  "Eres mi lugar favorito",
+  "Contigo todo es más bonito",
+  "Te amo hoy y siempre"
+];
+
+let galaxiaLista = false;
+function iniciarGalaxia(){
+  if(galaxiaLista) return;
+  galaxiaLista = true;
+
+  const cv = document.getElementById("galaxia");
+  const ctx = cv.getContext("2d");
+  let W, H, S;
+
+  function medir(){
+    const d = Math.min(window.devicePixelRatio || 1, 2);
+    W = cv.clientWidth; H = cv.clientHeight;
+    cv.width = W * d; cv.height = H * d;
+    ctx.setTransform(d, 0, 0, d, 0, 0);
+    S = Math.min(W, H * 0.62) * 0.018;
+  }
+  medir();
+  window.addEventListener("resize", medir);
+
+  /* Corazón: puntos en 3D */
+  const corazon = [];
+  for(let i = 0; i < 2600; i++){
+    const t = Math.random() * Math.PI * 2;
+    const k = Math.pow(Math.random(), 0.45);
+    const x = 16 * Math.pow(Math.sin(t), 3);
+    const y = -(13*Math.cos(t) - 5*Math.cos(2*t) - 2*Math.cos(3*t) - Math.cos(4*t));
+    corazon.push({
+      x:x*k, y:y*k, z:(Math.random() - 0.5) * 10 * (1.1 - k),
+      s:1 + Math.random() * 1.5,
+      c:`hsl(${338 + Math.random()*16},${85 + Math.random()*15}%,${58 + Math.random()*22}%)`
+    });
+  }
+
+  /* Galaxia: anillo en espiral alrededor del corazón */
+  const galaxia = [];
+  for(let i = 0; i < 950; i++){
+    const r = 24 + Math.random() * 26;
+    const brazo = Math.random() < 0.5 ? 0 : Math.PI;
+    const a = brazo + r * 0.13 + (Math.random() - 0.5) * 0.7;
+    const tono = [215, 340, 200, 320][Math.floor(Math.random() * 4)];
+    galaxia.push({
+      r, a, y:(Math.random() - 0.5) * 3,
+      s:0.8 + Math.random() * 1.3,
+      c:`hsl(${tono},90%,${70 + Math.random()*20}%)`
+    });
+  }
+
+  let giro = 0, rot = 0, arrastrando = false, ultimoX = 0;
+  cv.addEventListener("pointerdown", e => { arrastrando = true; ultimoX = e.clientX; cv.style.cursor = "grabbing"; });
+  window.addEventListener("pointerup", () => { arrastrando = false; cv.style.cursor = "grab"; });
+  window.addEventListener("pointermove", e => {
+    if(!arrastrando) return;
+    giro += (e.clientX - ultimoX) * 0.01;
+    ultimoX = e.clientX;
+  });
+
+  function frame(t){
+    requestAnimationFrame(frame);
+    if(!document.getElementById("p1").classList.contains("activa")) return;
+
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "lighter";
+    if(!arrastrando) giro += 0.004;
+    rot += 0.0016;
+
+    const lat = 1 + 0.07 * Math.pow(Math.max(0, Math.sin(t / 330)), 4);
+    const cx = W / 2, cy = H * 0.46;
+    const cosG = Math.cos(giro), sinG = Math.sin(giro);
+
+    /* Anillo de galaxia (inclinado) */
+    const tilt = 0.4, cosT = Math.cos(tilt), sinT = Math.sin(tilt);
+    const cosR = Math.cos(giro * 0.4), sinR = Math.sin(giro * 0.4);
+    ctx.globalAlpha = 0.75;
+    for(const p of galaxia){
+      const ang = p.a + rot * 6;
+      let x = p.r * Math.cos(ang), z = p.r * Math.sin(ang), y = p.y;
+      const x1 = x * cosR + z * sinR, z1 = -x * sinR + z * cosR;
+      const y2 = y * cosT - z1 * sinT, z2 = y * sinT + z1 * cosT;
+      const f = 500 / (500 + z2 * S);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(cx + x1 * S * f, cy + y2 * S * f, p.s * f, p.s * f);
+    }
+
+    /* Corazón */
+    ctx.globalAlpha = 0.85;
+    for(const p of corazon){
+      const x1 = p.x * cosG + p.z * sinG;
+      const z1 = -p.x * sinG + p.z * cosG;
+      const f = 500 / (500 + z1 * S);
+      ctx.fillStyle = p.c;
+      ctx.fillRect(cx + x1 * S * lat * f, cy + p.y * S * lat * f, p.s * f, p.s * f);
+    }
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = "source-over";
+  }
+  requestAnimationFrame(frame);
+
+  /* Frases que cambian */
+  const fr = document.getElementById("frase");
+  let n = 0;
+  fr.textContent = frases[0];
+  setInterval(() => {
+    fr.style.opacity = 0;
+    setTimeout(() => {
+      n = (n + 1) % frases.length;
+      fr.textContent = frases[n];
+      fr.style.opacity = 1;
+    }, 600);
+  }, 3800);
+}
+
+iniciarGalaxia();
+
+/* Emojis que suben flotando por toda la página */
+const emojis = ["🩶","👩🏽‍❤️‍💋‍👨🏻"];
+setInterval(() => {
+  const e = document.createElement("span");
+  e.className = "flota";
+  e.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  e.style.left = (Math.random() * 92) + "%";
+  e.style.fontSize = (20 + Math.random() * 16) + "px";
+  e.style.setProperty("--g", ((Math.random() - 0.5) * 60) + "deg");
+  e.style.animationDuration = (8 + Math.random() * 6) + "s";
+  document.body.appendChild(e);
+  setTimeout(() => e.remove(), 14500);
+}, 1800);
+
+/* Humo en forma de corazón que sale de la parte de atrás de cada carrito */
+const colores = ["#e11d48","#ff5c7a","#1d4ed8","#7fb0ff"];
+
+function soltarHumo(carro, haciaDerecha){
+  if(!document.getElementById("p2").classList.contains("activa")) return;
+  const r = carro.getBoundingClientRect();
+  const h = document.createElement("span");
+  h.className = "humo";
+  h.textContent = "♥";
+  h.style.color = colores[Math.floor(Math.random()*colores.length)];
+  h.style.fontSize = (16 + Math.random()*14) + "px";
+  h.style.left = (haciaDerecha ? r.left + 4 : r.right - 4) + "px";
+  h.style.top = (r.top + 46) + "px";
+  h.style.setProperty("--dx", ((haciaDerecha ? -1 : 1) * (20 + Math.random()*45)) + "px");
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 2800);
+}
+
+setInterval(() => soltarHumo(document.getElementById("carroRojo"), true), 240);
+setInterval(() => soltarHumo(document.getElementById("carroAzul"), false), 240);
+</script>
+
+</body>
+</html>
